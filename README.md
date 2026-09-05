@@ -13,6 +13,7 @@ particular are a list of scars.
 | File | What it covers |
 |---|---|
 | [engineering/coding-agent-instructions.md](engineering/coding-agent-instructions.md) | Universal rules for a coding agent. Integrate before authoring; when to use a library and when not to. |
+| [engineering/api-versioning.md](engineering/api-versioning.md) | Why `/api/v1` belongs in the path from the first endpoint — path vs header, what stays unversioned, and how retirement is announced. |
 | [process/delivery-rules.md](process/delivery-rules.md) | The closed-loop rule, deploying small, authorisation, auditing, deletes and undo, and how to debug when your measurements disagree with the person reporting the bug. |
 | [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | 21 traps on Workers, D1, R2, Turnstile and Better Auth. Symptom → cause → fix. Most are invisible to `curl` and to unit tests. |
 | [design/design-system.md](design/design-system.md) | Design-system rules — tokens, density, dark mode, what the system should not look like — with one project's tokens as a worked example. |
