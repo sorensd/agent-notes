@@ -120,6 +120,36 @@ a moment to notice which record is actually selected.
 - Restrict it to its own permission: re-creating a deleted record and overwriting current
   values are different authority from editing
 
+## Commit and deploy as the human, and ask who that is
+
+**Always ask for the author identity before the first commit. Never commit or deploy as
+Claude, as an agent, or as an address you inferred from context.**
+
+This went wrong in a way worth recording. An agent took the email from its own session
+context and used it as the git author. That address happened to be registered to a
+*different person's* GitHub account, so every commit in a new repository was publicly
+attributed to a stranger.
+
+The rules that follow from it:
+
+- **Ask.** "What name and email should the commits use?" is one question and it costs
+  nothing. An email visible in a tool's configuration is not necessarily the one the person
+  commits under.
+- **Match the existing repo.** `git log --format='%an <%ae>' | sort -u` tells you the
+  identity already in use. Prefer it over anything you were told elsewhere.
+- **Verify the attribution after pushing**, not just the local commit. GitHub matches the
+  author *email* to an account; a local `user.name` of the right person means nothing if the
+  email belongs to someone else:
+
+  ```bash
+  gh api repos/OWNER/REPO/commits --jq '.[] | {author: .commit.author.email, github: .author.login}'
+  ```
+
+- **Never add agent co-author trailers or agent-attributed commits** unless the person has
+  explicitly asked for them.
+- The same applies to deployments, releases and anything else that carries a name. It is
+  the human's work and the human's account.
+
 ## Evidence over theory when debugging
 
 The mistake worth naming: when a measurement disagrees with the person reporting the bug,

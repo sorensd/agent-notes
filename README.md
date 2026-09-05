@@ -16,6 +16,7 @@ particular are a list of scars.
 | [process/delivery-rules.md](process/delivery-rules.md) | The closed-loop rule, deploying small, authorisation, auditing, deletes and undo, and how to debug when your measurements disagree with the person reporting the bug. |
 | [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | 21 traps on Workers, D1, R2, Turnstile and Better Auth. Symptom → cause → fix. Most are invisible to `curl` and to unit tests. |
 | [design/design-system.md](design/design-system.md) | Design-system rules — tokens, density, dark mode, what the system should not look like — with one project's tokens as a worked example. |
+| [design/ux-patterns.md](design/ux-patterns.md) | Interaction patterns that earned their place: one-time codes, nothing-written-until-save, unsaved-changes tracking that survives autofill, stacking contexts, operational tables, honest empty states. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Building analytics and suggestions into a product without producing something confident and wrong. |
 
 ## Using it with an agent
@@ -45,6 +46,10 @@ request — headers included — early.
 
 **Write down what cost you time.** Symptom, cause, fix, and *why it was hard to find*. That
 last part is what saves the next person an afternoon.
+
+**Commit as the human.** Ask for the author name and email before the first commit, match
+what the repo already uses, and verify the attribution on the host afterwards — GitHub
+matches on the email, and the wrong one credits a stranger.
 
 ## Contributing to it
 
