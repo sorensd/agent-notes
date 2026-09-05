@@ -38,6 +38,43 @@ The details that make the difference between "fine" and "invisible":
 If you remove a channel, **remove the endpoint, not the tab.** A hidden method still
 answers, still costs money per attempt, and is a second way in on a channel nobody watches.
 
+## Single-use links in email are not private
+
+The one that catches everybody, in two forms: a magic sign-in link that is already spent
+when the person clicks it, and an unsubscribe link that unsubscribes people who never
+clicked.
+
+**Cause.** Gmail, Outlook Safe Links, corporate mail scanners and crawlers all fetch links
+to preview or scan them. If the URL performs the action on `GET`, whichever machine gets
+there first performs it.
+
+**The fix has two layers, and which you need depends on the action.**
+
+**Put the token in the URL fragment.** `https://example.com/invite#token=…` — browsers
+never transmit a fragment, so a scanner fetching that URL sends `GET /invite` and nothing
+redeemable. This alone defeats every prefetcher that works by fetching a URL, which is
+nearly all of them. Read it in the browser, then `history.replaceState` it away so it
+cannot reach a screenshot, a shared URL or browser history.
+
+**Then decide between a click and a challenge**, because the fragment does not stop an
+agent that opens the link in a real browser and executes the page:
+
+- **A destructive or irreversible action — unsubscribe, delete, decline — should require a
+  click.** A confirmation page is the correct design there anyway, and the cost of a wrong
+  automated action is high.
+- **A sign-in link should not.** Somebody who has already clicked a link in their email
+  should not be asked to click another. Run an invisible bot challenge instead: in managed
+  mode most people see nothing, and it costs a human a moment of spinner while costing a
+  bot the token.
+
+**Whatever you do, the landing page must have no server-side side effects.** That property
+is the whole defence. The moment a plain `GET` acts, you are back where you started.
+
+State the residual risk rather than implying there is none: an agent driving a full
+browser can still act, because at that point it is indistinguishable from the person. It
+needs the token from the email to do it, so the failure is a stale link rather than a way
+in.
+
 ## Bot challenges
 
 - **Render lazily.** A challenge widget held on an idle tab is a challenge that can expire,
