@@ -32,7 +32,12 @@ The details that make the difference between "fine" and "invisible":
   requires a trailing `@host #code` line in the SMS body and is origin-bound.
 - **A resend timer**, 30 seconds, visible and counting. Without it people press resend
   three times and burn three codes.
-- **A honeypot field**, off-screen, `tabIndex={-1}`. Cheap and effective.
+- **A honeypot field**, off-screen, `tabIndex={-1}`, `autocomplete="new-password"`. Cheap
+  and effective — but **enforce it on the server**, not only in the client. A client-side
+  check drops nothing that posts straight to the API, which is exactly what a bot does.
+  Send the field's value with the request (a header works when the body shape is fixed by
+  an auth library) and reject a non-empty one server-side, with a plain 400 that names
+  nothing. It sits behind the bot-challenge as a second, zero-cost line.
 - **Paste the whole code** into the first box and have it distribute across all six.
 
 If you remove a channel, **remove the endpoint, not the tab.** A hidden method still
