@@ -30,14 +30,21 @@ the portal host with the auth library's own session primitives.
    ~2 minutes, single-use. Return the raw token and the portal origin to the console tab.
    No token is ever minted without an active, authorised session.
 
-2. **Hand off in memory (postMessage).** The console opens `portal/impersonate` in a new tab
-   **with no token in the URL**. The portal page posts `ready` to `window.opener` at the
-   exact console origin; the console replies with the token, targeted to the exact portal
-   origin. Both sides check `event.origin` (and `event.source`). The token lives only in
-   memory — never in a URL, history, or Referer. A copied `/impersonate` URL, or the page
-   opened with no opener, does nothing.
+2. **Open a real link to a console interstitial, then post to the portal.** Make the button
+   a plain `<a target="_blank" href="/impersonate?vendor=…">` — an ordinary link, which
+   browsers open freely, unlike a scripted `window.open` that pop-up blockers eat. The link
+   carries only a non-secret id and does nothing unless the opener already has a Super Admin
+   session. That new tab, **on the console origin**, shows a "signing you in" screen, mints
+   the grant there (step 1, authenticated), then submits a **form POST that navigates this
+   same tab** to the portal's redeem endpoint. The token rides in the POST body — never a
+   URL, history, or Referer.
 
-3. **Redeem (portal host).** A small endpoint validates the grant (unexpired, unused —
+   (An earlier version handed the token between two open windows with `postMessage`. It
+   works, but the link-to-interstitial version is simpler, survives pop-up blockers, and
+   keeps the token minting and the POST in one authenticated tab.)
+
+3. **Redeem (portal host).** The form POST navigates the console tab onto the portal, so a
+   small endpoint there validates the grant (unexpired, unused —
    enforced by an atomic `UPDATE … SET used_at=now WHERE used_at IS NULL`, not by the read),
    re-checks the target is still a valid portal user, then starts the session **on this
    host** using the auth library's own `createSession(userId, …, { impersonatedBy })` and
