@@ -175,6 +175,33 @@ about.
 Where behaviour depends on a layer the tests cannot model, **pin the invariant rather than
 the behaviour**: assert the file does not exist, assert the route is absent.
 
+## Keep an issue log with blast radius
+
+A changelog says what shipped. An issue log says **what broke, why, and what the fix could
+break next** — which is the part that saves time later.
+
+One file in the project, newest first, an entry whenever something costs more than an hour
+or a fix touches shared code:
+
+> **Symptom → cause → fix → blast radius → how it was verified.**
+
+**Blast radius is the field people skip and the one that pays.** Write down what the fix
+touched and what depends on it. Real examples:
+
+- A permission key referenced in code but missing from the permissions table **403s
+  everyone forever, including the super admin** — grants are rows, not implications
+- Renaming a build entry file silently restores a bug that only appears on one hostname's
+  root path
+- Adding a new audit event name quietly changes what an undo feature will refuse
+- Widening a function's signature breaks callers that a typecheck catches, but changing its
+  *normalisation* (lowercasing, trimming) breaks comparisons that nothing catches
+
+Then keep a short table of **"if you touch X, also check Y"** for the shared modules. The
+expensive failures are rarely local mistakes; they are distant consequences.
+
+Two files is the right split when work spans projects: platform traps in a portable
+document that travels, and project-specific dependencies in the repo they belong to.
+
 ## Write down what cost you time
 
 Every non-obvious cause, in a document that travels: symptom → cause → fix. Include *why it
