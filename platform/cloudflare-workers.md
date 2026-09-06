@@ -328,3 +328,25 @@ exactly this reason — a bare `wrangler deploy` is the trap.
 wrangler creates the DNS record + route. No dashboard step needed (the zone must be in the
 same account). Adding the hostname to a Turnstile widget does **not** create DNS — that is a
 separate thing people conflate.
+
+## A brand-new custom domain has an edge warm-up window — don't blame the app
+
+**Symptom.** You add a new custom domain to a Worker, it resolves and serves, but one flow —
+often a **cross-site POST navigation** to the new host — returns 403 in every browser for a
+while, then **starts working on its own** with no change.
+
+**Cause.** A freshly-provisioned Cloudflare custom domain takes minutes to fully settle: SSL
+issuance, routing, and security/config propagation across the edge. In that window the new
+host can get inconsistent edge decisions (managed challenge / bot rules / stale `cf_clearance`
+from pre-clearance) that an *established* sibling host does not. It clears once propagation
+completes.
+
+**How to know it's this, not your code.** `curl` (even mimicking the browser's exact headers)
+returns the normal 2xx/3xx and reaches the Worker — only real browsers 403, only on the new
+host. That is the tell: a 403 curl can't reproduce is an edge decision. Prove the app with a
+direct probe (`--resolve newhost:443:<zone-ip>`); if the Worker's own handler runs (its own
+redirect/JSON, no `cf-mitigated` header), the app is fine — wait, then retry.
+
+**So:** after adding a custom domain, give it a few minutes before debugging a flaky
+cross-host/edge 403 on it. And keep Turnstile **pre-clearance off** so its zone-scoped
+`cf_clearance` never adds to the noise.
