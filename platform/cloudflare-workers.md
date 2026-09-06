@@ -307,3 +307,24 @@ single-use token) separate from CSRF.
 library's CSRF/origin guard is often cookie-gated, and the logged-in path is the one that
 breaks. Distinguish it from an *edge* 403 (Cloudflare block: HTML + Ray ID + `cf-mitigated`)
 vs your *app* 403 (your own JSON, reaches the Worker and `wrangler tail`).
+
+## `wrangler deploy` uses the vite-plugin's generated config, not your `wrangler.jsonc`
+
+**Symptom.** You add a route / custom domain / binding to `wrangler.jsonc`, run `wrangler
+deploy`, and the change does not take — no error, the deploy just uses the old config. A new
+custom domain never gets provisioned and the host keeps not resolving.
+
+**Cause.** With `@cloudflare/vite-plugin`, `vite build` emits a *redirected* deploy config at
+`dist/<name>/wrangler.json`, and `wrangler deploy` uses **that**, not your source
+`wrangler.jsonc` (it even prints "Using redirected Wrangler configuration"). Edit the source,
+skip the rebuild, and you deploy the stale generated copy.
+
+**Fix.** Always `vite build` **after** any `wrangler.jsonc` change and **before** `wrangler
+deploy`. The project's `deploy` script chains them (`vite build && wrangler deploy`) for
+exactly this reason — a bare `wrangler deploy` is the trap.
+
+**Bonus.** Custom domains *can* be provisioned from config: add
+`{ "pattern": "x.example.com", "custom_domain": true }` to `routes`, rebuild, deploy, and
+wrangler creates the DNS record + route. No dashboard step needed (the zone must be in the
+same account). Adding the hostname to a Turnstile widget does **not** create DNS — that is a
+separate thing people conflate.
