@@ -20,6 +20,7 @@ particular are a list of scars.
 | [design/design-system.md](design/design-system.md) | Design-system rules — tokens, density, dark mode, what the system should not look like — with one project's tokens as a worked example. |
 | [design/ux-patterns.md](design/ux-patterns.md) | Interaction patterns that earned their place: one-time codes, nothing-written-until-save, unsaved-changes tracking that survives autofill, stacking contexts, operational tables, honest empty states. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Building analytics and suggestions into a product without producing something confident and wrong. |
+| [ai/agentic-operations.md](ai/agentic-operations.md) | The business case: how instrumentation → data intelligence → automation compound into 10X, the agency spectrum (observe→recommend→assist→automate), and R.O.B./Rael Sports as the worked example. |
 
 ## Using it with an agent
 
