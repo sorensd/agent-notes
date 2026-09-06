@@ -7,6 +7,12 @@ the system that records the work also understand it and, carefully, act on it.
 Industry-agnostic. The worked example is Rael Sports and its intelligence layer, **R.O.B.**,
 because a concrete example beats a manifesto — but nothing here is specific to sports apparel.
 
+> **For the agent reading this:** the actionable parts are the **sequencing** (instrument →
+> intelligence → agency), the **agency spectrum** (observe → recommend → assist → automate),
+> and the **non-negotiables** — apply them whenever a project asks for analytics,
+> recommendations, forecasting, or "an AI that studies our own data". The 10X framing is the
+> *why* you can hand a stakeholder; the rules are the *what you do*.
+
 ---
 
 ## The thesis
