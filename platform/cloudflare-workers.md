@@ -284,3 +284,26 @@ One Worker serving several hostnames is where most of the above bit hardest:
 - [ ] Session cookies are host-only (no `Domain` attribute)
 - [ ] Cross-host authorisation is enforced server-side on every route, not in the UI
 - [ ] Client bundles are split per app if one audience should not receive the other's code
+
+
+## Better Auth's origin check is gated on the cookie, so a cookieless test lies
+
+**Symptom.** A cross-origin `POST /api/auth/*` (e.g. an SSO/impersonation handoff from
+`app.example.com` to `portal.example.com`) returns **403** — but only for users who are
+**already logged in** to the target host. Fresh browsers, and your integration tests, pass.
+
+**Cause.** Better Auth's `validateOrigin` checks the `Origin` against `trustedOrigins`
+(default: the request's own host) **only when the request carries a Cookie**:
+`if (!(forceValidate || useCookies)) return;` with `useCookies = headers.has("cookie")`. No
+cookie → no check → it passes. So the failure appears intermittent (depends on an existing
+session cookie) and a cookieless test is a false green.
+
+**Fix.** Set `trustedOrigins` to include the sibling first-party host(s) — a function
+`(request) => string[]` is evaluated per request, so you can trust the exact sibling
+(`app.` ↔ `portal.`) without a wildcard onto every subdomain. Keep the real authority (a
+single-use token) separate from CSRF.
+
+**Rule of thumb.** When reproducing an auth 403, send a **cookie** in the repro — an auth
+library's CSRF/origin guard is often cookie-gated, and the logged-in path is the one that
+breaks. Distinguish it from an *edge* 403 (Cloudflare block: HTML + Ray ID + `cf-mitigated`)
+vs your *app* 403 (your own JSON, reaches the Worker and `wrangler tail`).
