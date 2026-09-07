@@ -217,3 +217,30 @@ Share the *logic* — the sign-in form, the components, the tokens — so the ha
 behaviour cannot fork. Vary the composition, the wording and the chrome.
 
 And enforce the boundary on the server. Refusing in the UI is not refusing.
+
+## Saving: form edits hold, row actions apply
+
+One rule, written down so no page invents auto-save again: **editing a record's fields =
+Save / Discard with an "Unsaved changes" bar and a leave-page guard; a discrete state action
+on a row (a status select, enable/disable, set primary, assign a role) = immediate, audited,
+confirmed if destructive.** An order's header and every line are one form with one Save.
+Silent per-field commits on blur look like a feature and read as an inconsistency the moment
+a second page does it differently.
+
+## Selection: the bar lives in the table header
+
+When rows are selected, the column-header row is *replaced* by the selection bar — `N
+selected · summary · the list's real actions · Export selected · Ask assistant · ×` — on
+every list, with one shared component. A floating bar at the bottom of the viewport was
+rejected outright ("I want selection like this everywhere"). Coexists with sortable headers:
+headers when nothing is selected, the bar when something is.
+
+## Import and export: two buttons, two dialogs
+
+Separate **Import** and **Export** buttons on every list — never one combined control.
+Export opens a scope dialog (Selected N / Current page / All / Matching your filters;
+spreadsheet-CSV or plain). Import opens a stepped dialog that starts with a **download the
+sample CSV** link every time, validates the whole file first and shows the rows it will
+quarantine (bad values are set aside, never coerced), then commits idempotently — running the
+same file twice changes nothing. Rosters get one Import with tabs (CSV / paste text / AI
+reader) and a preview before anything is added.
