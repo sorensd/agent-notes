@@ -209,3 +209,14 @@ was hard to find*, because that is the part that saves the next person an aftern
 
 Link it from wherever an agent starts reading, so it is hit before debugging rather than
 after.
+
+## Chained deploys: never let a pipe mask a gate
+
+A merge → pull → build → deploy chain joined with `&&` is only as safe as each step's exit
+code. Piping a gating command into `tail`/`head`/`grep` (`gh pr merge … | tail -2`) replaces
+its exit code with the filter's — a failed merge printed "no pull requests found", the chain
+continued, and it **redeployed the previous build**. Rules: `set -o pipefail`; merge by PR
+*number*, not branch name (a PR is not always findable by branch the second after it is
+created); write long outputs to a file and check `$?` explicitly; and after every deploy,
+verify the live version endpoint equals the stamp you committed — that check is what caught
+it.
