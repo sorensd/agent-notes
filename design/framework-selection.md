@@ -95,6 +95,10 @@ weight/grid — do not import a second pack for one icon.
 6. **One per capability, project-wide.** One component library, one icon family, one token
    layer, one form stack. Consistency is a feature.
 
+For the map underneath this table — what each library actually is, which layer it occupies,
+and how to combine primitives, design system and motion without producing slop — see
+[ui-library-ecosystem.md](ui-library-ecosystem.md).
+
 **Do not introduce a second** router, ORM, validation library, auth system, component
 library or icon family without a decision recorded here. That is the rule that keeps four
 surfaces reading as one product.
