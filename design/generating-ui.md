@@ -25,6 +25,14 @@ can be rendered and compared. Do not iterate on taste from a terminal.
 The winning "single prompt" was mostly a brief built with the owner over several rounds.
 A generation brief that works:
 
+- **Use case, first line** — landing page, pricing, dashboard, operational console,
+  e-commerce browse/product, checkout, forms, settings, docs, chat, onboarding, auth.
+  Everything below inherits from it: density, motion budget, required states, which
+  components must exist. Unnamed, a generator defaults to the landing-page aesthetic and
+  applies it to whatever you asked for. See
+  [ui-library-ecosystem.md §7](ui-library-ecosystem.md) for the table, and
+  [coding-agent-instructions.md](../engineering/coding-agent-instructions.md) §6 for the
+  underlying rule.
 - **Context** — what the product is, who uses it, the domain vocabulary and lifecycle.
 - **Functional requirements** — every panel/component that must exist and what it must do
   (sortable tables, bulk select, popover notifications, save/discard forms, skeletons that
@@ -41,7 +49,7 @@ A generation brief that works:
 ## 3. Variants, then a human picks
 
 Ask for multiple variants (the reference project shipped four behind `?v=`), rendered and
-screenshotted. The owner picks by looking, not by reading a description. Park the runner-up
+screenshotted — all for the *same* use case, so they are actually comparable. The owner picks by looking, not by reading a description. Park the runner-up
 as a variant; don't delete it.
 
 ## 4. Porting the winner: a design system is tokens AND chrome

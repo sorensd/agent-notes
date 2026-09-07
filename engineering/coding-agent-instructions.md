@@ -215,6 +215,12 @@ Do not create decorative SVG artwork manually unless explicitly requested.
 
 Use real component systems, templates, icon libraries, chart libraries, and design systems.
 
+For what to build *instead* — the difference between a genuinely sophisticated interface
+and slop wearing the same words — see `../agent-notes/design/ui-library-ecosystem.md` §6.
+Sophisticated motion, layered depth, real dark mode, command interfaces, honest empty
+states and keyboard-first flows are the goal; the list above is what gets produced when
+those are skipped.
+
 ---
 
 # 6. BEFORE BUILDING A FRONTEND, IDENTIFY THE PAGE TYPE
@@ -244,6 +250,14 @@ Examples:
 The selected design system or template must match the page type.
 
 Do not use the same dashboard-style design for every project.
+
+Each page type carries its own density, motion budget, decorative-effects policy,
+signature components and required states — and they differ sharply: a checkout allows no
+motion and no effects, a landing page is where effects belong, an operational console is
+the densest surface you will build. The table is in
+`../agent-notes/design/ui-library-ecosystem.md` §7. Name the page type in the first line
+of any generation brief; unnamed, a generator defaults to the landing-page aesthetic and
+applies it to whatever was asked for.
 
 ---
 
@@ -275,6 +289,22 @@ Examples include, depending on the stack:
 This list is illustrative, not restrictive.
 
 Select the system that best fits the project.
+
+**These are not all the same kind of thing, and the list should not be read as a flat
+menu.** They occupy different layers, and most of them stack rather than compete:
+
+1. **Behavioural foundation** (accessibility, keyboard, focus; no visuals) — Radix UI,
+   Base UI, Ark UI, React Aria, Headless UI, Ariakit.
+2. **Design system / source you own** — shadcn/ui, Park UI, Origin UI, ReUI, Kibo UI.
+3. **Motion and visual effect** — Motion, Motion Primitives, Magic UI, Aceternity UI,
+   Cult UI. Subject to the page type's motion budget.
+4. **Registries** — 21st.dev and friends: for discovery, adapt into your own primitives.
+5. **Complete application systems** — MUI, Mantine, Chakra, HeroUI, Ant Design, Tremor,
+   Polaris. **An alternative to layers 1-3, not an addition to them.**
+
+Pick one per layer and one per capability, project-wide. Full breakdown in
+`../agent-notes/design/ui-library-ecosystem.md`; the per-capability choices (icons,
+tables, forms, charts) are in `../agent-notes/design/framework-selection.md` §3.
 
 Do not install a React component library into a non-React application merely because it is popular.
 
