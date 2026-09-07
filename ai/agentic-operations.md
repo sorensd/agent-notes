@@ -4,7 +4,8 @@ A companion to [data-intelligence.md](data-intelligence.md). That note is *how t
 layer without lying*. This one is *why it is worth building* — the business case for making
 the system that records the work also understand it and, carefully, act on it.
 
-Industry-agnostic. The worked example is Rael Sports and its intelligence layer, **R.O.B.**,
+Industry-agnostic. The worked example is a custom-apparel operation and its intelligence layer, **the Observer
+Bot**,
 because a concrete example beats a manifesto — but nothing here is specific to sports apparel.
 
 > **For the agent reading this:** the actionable parts are the **sequencing** (instrument →
@@ -122,14 +123,14 @@ are not bureaucracy; they are what makes the multiplier safe to switch on.
 
 ---
 
-## Worked example — Rael Sports and R.O.B.
+## Worked example — a custom-apparel OMS and its Observer Bot
 
-Rael Sports is a small custom-apparel operation: customers and teams order kit, vendors make
+The client is a small custom-apparel operation: customers and teams order kit, vendors make
 it, it ships in and then out. A two-to-three-person office runs the whole thing. They will
 never have a data department and should not need one.
 
-So the OMS is being built with an intelligence layer designed in from the start — **R.O.B.,
-the Rael Observer Bot** — even though it is deliberately the *last* thing built. (It can only
+So the OMS is being built with an intelligence layer designed in from the start — **the
+Observer Bot** — even though it is deliberately the *last* thing built. (It can only
 be as good as the history it reads, and at design time production held exactly one order.
 Building it early would make it confident, not correct.) The important part for this note is
 the *shape*, which is the general pattern above made concrete:
@@ -143,7 +144,7 @@ the *shape*, which is the general pattern above made concrete:
   accuracy, cost variance. Not "is this vendor good" but "did this vendor *change*". A human
   feels this eventually; the system sees the change-point the week it happens.
 - **Margin leakage** — orders priced below rule, fees waived, rush absorbed. Every waiver is
-  a decision someone made in a hurry; R.O.B.'s job is to total them up. This number is
+  a decision someone made in a hurry; the Observer Bot's job is to total them up. This number is
   invisible by hand and often larger than any single deal.
 - **Demand and reorder prediction** — teams reorder on a season cycle. Who is due, and when
   to reach out — a prompt *with a reason*, not a mail-merge. One operator's "I should call
@@ -158,9 +159,9 @@ the *shape*, which is the general pattern above made concrete:
   happens to margin and delivery risk?" Decision support for the handful of decisions that
   move the business.
 - **Tuning, in the open** — every signal records whether it was acted on, dismissed or
-  ignored; thresholds tune from that, visibly and reversibly; a page lists what R.O.B. got
+  ignored; thresholds tune from that, visibly and reversibly; a page lists what the bot got
   wrong.
-- **Ask R.O.B.** — a conversational surface over all of it, role-gated and grounded on
+- **Ask the bot** — a conversational surface over all of it, role-gated and grounded on
   computed facts so it never invents a figure. The chat is the *last* thing, not the first:
   a chatbot over no baseline just launders guesses into sentences.
 

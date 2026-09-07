@@ -28,7 +28,7 @@ pre-render), and you end up shipping a UI framework *inside* it anyway. An SPA o
 content/marketing site ships a blank div to crawlers and a slow first paint to users.
 
 **The OMS is an application surface**, so Astro was ruled out despite being the top
-Cloudflare framework — that ranking is dominated by content sites on Pages. If Rael Sports
+Cloudflare framework — that ranking is dominated by content sites on Pages. If the client
 ever needs a public marketing/docs site, Astro is the right pick *there*, coexisting on the
 same API.
 
