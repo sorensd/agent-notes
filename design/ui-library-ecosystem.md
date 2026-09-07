@@ -154,18 +154,22 @@ everything + no empty states + no focus rings. Every one of those is a decision 
 
 ---
 
-## 7. Generation is use-case aware — name the surface first
+## 7. Generation is use-case aware — name the use case first
 
 The single biggest determinant of whether generated UI looks right is not the library or
-the prompt wording. It is **which kind of surface you are generating**. A landing page and
+the prompt wording. It is **which use case you are generating for**. A landing page and
 an operations console are opposite products: what makes one excellent makes the other
-unusable. An agent asked for "a modern UI" with no archetype named will default to the
+unusable. An agent asked for "a modern UI" with no use case named will default to the
 landing-page aesthetic — big hero, huge type, gradient, generous whitespace, motion — and
 apply it to a dashboard. That is the most common single source of slop.
 
-**Name the archetype in the first line of the brief**, then inherit its column below.
+**Name the use case in the first line of the brief**, then inherit its row below.
+This is the expanded form of the rule already in
+[coding-agent-instructions.md](../engineering/coding-agent-instructions.md) §6 — identify
+the page type before building — and it pairs with §1 and §7 of that file: you are choosing
+*which* existing system to integrate, never authoring one from scratch.
 
-| Surface | Optimise for | Density | Motion | Layer-3 effects | Signature components | Slop signal |
+| Use case | Optimise for | Density | Motion | Layer-3 effects | Signature components | Slop signal |
 |---|---|---|---|---|---|---|
 | **Landing / marketing** | Persuasion, first paint, SEO | Low — whitespace is the design | Scroll-linked, generous | **Yes** — this is where Aceternity/Magic UI belong | Hero, feature grid, logos, testimonial, pricing, FAQ, CTA | Generic hero + gradient blob + no real copy |
 | **Pricing / conversion** | Comparison clarity, one obvious action | Medium | Minimal — plan toggle only | Restrained | Plan cards, feature matrix, toggle, FAQ | Three identical cards with a fake "most popular" badge |
@@ -187,15 +191,15 @@ Three rules fall out of this table:
   motion it tolerates. A console gets transitions; a landing page gets scroll effects.
 - **Layer 3 belongs to marketing surfaces.** Aceternity/Magic UI on a checkout or a console
   is a defect, not a flourish. Product surfaces get Motion Primitives at most.
-- **Every archetype has its own required states**, and this is where generated UI is
+- **Every use case has its own required states**, and this is where generated UI is
   usually thinnest: empty, loading (skeletons matching real structure), error, partial
   permission, and — for commerce — out-of-stock. Ask for them explicitly or you will not
   get them.
 
-**In the brief**, this means the first line is *"This is a [archetype] for [product]"*, the
+**In the brief**, this means the first line is *"This is a [use case] for [product]"*, the
 functional requirements come from that row's signature components, the demo data is
 realistic for that domain (see generating-ui.md §2), and the stack line inherits the motion
-and effects policy above. Generate variants **within one archetype** — comparing a landing
+and effects policy above. Generate variants **within one use case** — comparing a landing
 page against a dashboard tells you nothing.
 
 ## 8. Stacks that work

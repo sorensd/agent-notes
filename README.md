@@ -12,7 +12,7 @@ particular are a list of scars.
 
 | File | What it covers |
 |---|---|
-| [engineering/coding-agent-instructions.md](engineering/coding-agent-instructions.md) | Universal rules for a coding agent. Integrate before authoring; when to use a library and when not to. |
+| [engineering/coding-agent-instructions.md](engineering/coding-agent-instructions.md) | Universal rules for a coding agent. Integrate before authoring; when to use a library and when not to; identify the page type before building a frontend. |
 | [engineering/api-versioning.md](engineering/api-versioning.md) | Why `/api/v1` belongs in the path from the first endpoint — path vs header, what stays unversioned, and how retirement is announced. |
 | [engineering/roles-vs-capabilities.md](engineering/roles-vs-capabilities.md) | Roles for staff (few, fixed, a matrix); capabilities + membership standing for external parties (data, N kinds, permissions computed per request, server-enforced). |
 | [engineering/cross-host-impersonation.md](engineering/cross-host-impersonation.md) | "Log in as" across two hosts that share no cookie: a hash-only single-use grant, a postMessage handoff (no token in any URL), and the auth library's own session primitives. |
@@ -22,7 +22,7 @@ particular are a list of scars.
 | [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | 21 traps on Workers, D1, R2, Turnstile and Better Auth. Symptom → cause → fix. Most are invisible to `curl` and to unit tests. |
 | [design/generating-ui.md](design/generating-ui.md) | Don't hand-emit visual UI blind: write a strong style-free brief, generate several variants where they can be rendered, let a human pick, then port the winner (tokens AND chrome, replace not merge) and prove it with screenshots. |
 | [design/framework-selection.md](design/framework-selection.md) | Every framework serves one shape of problem: the app-vs-content test, what each web framework is for, and the UI resource layer (components, icons, tables, forms, charts) — one per capability, project-wide. |
-| [design/ui-library-ecosystem.md](design/ui-library-ecosystem.md) | The React UI ecosystem in five layers (primitives → source-owned systems → motion → registries → complete systems), what "futuristic" does and doesn't mean, and why UI generation must be use-case aware — landing page, dashboard, console, e-commerce, checkout each have their own density, motion budget and required states. |
+| [design/ui-library-ecosystem.md](design/ui-library-ecosystem.md) | The React UI ecosystem in five layers (primitives → source-owned systems → motion → registries → complete systems), what "futuristic" does and doesn't mean, and why UI generation must be use-case aware — landing page, dashboard, console, e-commerce, checkout each have their own density, motion budget, required states and slop signal. The expanded form of `coding-agent-instructions.md` §6. |
 | [design/design-system.md](design/design-system.md) | Design-system rules — tokens, density, dark mode, what the system should not look like — with one project's tokens as a worked example. |
 | [design/ux-patterns.md](design/ux-patterns.md) | Interaction patterns that earned their place: one-time codes, nothing-written-until-save, unsaved-changes tracking that survives autofill, stacking contexts, operational tables, honest empty states. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Building analytics and suggestions into a product without producing something confident and wrong. |
