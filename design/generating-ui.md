@@ -67,6 +67,9 @@ always-pass test key temporarily and restore it), capture screenshots in light a
 and compare against the reference captures. Report what was verified visually and what was
 only code-diffed. "Tests pass" is not "looks right".
 
+For the other case — an interface that already exists and needs the slop taken out rather
+than a new design generated — see [design-refactor.md](design-refactor.md).
+
 **Division of labour that works:** a render-capable generator designs the skin from a
 strong brief; the coding agent ports it into the live system, wires it to real data, and
 proves it with screenshots.
