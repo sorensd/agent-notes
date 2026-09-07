@@ -7,23 +7,65 @@ Everything here was written from real work, not from general advice. The platfor
 particular are a list of scars: each entry cost someone an afternoon, and says why it was
 hard to find.
 
-It is deliberately plain Markdown with no tooling, no build step and no dependencies.
+Plain Markdown. No tooling, no build step, no dependencies.
 
 ---
 
-## Start here
+## If you are an agent, read this section first
 
-If you read three things, read these:
+You are looking at a reference library, not a task. **Do not read all of it.** Match the
+work you have been given against the table below, load only the rows that match, and read
+those files before writing code — not after something breaks.
+
+| Load this | When the task involves |
+|---|---|
+| [engineering/coding-agent-instructions.md](engineering/coding-agent-instructions.md) | **Always.** Any code-writing task. It is the base ruleset the others assume. |
+| [process/delivery-rules.md](process/delivery-rules.md) | **Always.** Shipping anything, deciding what "done" means, or debugging a report you cannot reproduce. |
+| [design/ui-library-ecosystem.md](design/ui-library-ecosystem.md) | Any UI work at all. Contains the use-case table you must classify the screen against before designing it. |
+| [design/design-refactor.md](design/design-refactor.md) | A UI that already exists and is being restyled, modernised, or de-slopped. |
+| [design/generating-ui.md](design/generating-ui.md) | Producing a new visual design, or writing a brief for something else to generate one. |
+| [design/design-system.md](design/design-system.md) | Tokens, theming, dark mode, spacing or density decisions. |
+| [design/ux-patterns.md](design/ux-patterns.md) | Forms, saving, selection, one-time codes, tables, empty states, modals or overlays. |
+| [design/framework-selection.md](design/framework-selection.md) | Choosing a framework, a component library, an icon set, a table/form/chart library. |
+| [engineering/api-versioning.md](engineering/api-versioning.md) | Designing or changing an HTTP API surface. |
+| [engineering/roles-vs-capabilities.md](engineering/roles-vs-capabilities.md) | Permissions, roles, multi-tenancy, or access control for external parties. |
+| [engineering/cross-host-impersonation.md](engineering/cross-host-impersonation.md) | Sessions across two hosts, "log in as", or handing authentication between origins. |
+| [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | Cloudflare Workers, D1, R2, KV, Turnstile, Wrangler or Better Auth. |
+| [process/parallel-agent-slices.md](process/parallel-agent-slices.md) | Running several agents in parallel, worktrees, or coordinating slices of one change. |
+| [process/skills-and-tooling.md](process/skills-and-tooling.md) | Installing a skill, plugin or harness, or picking tooling for a chosen stack. |
+| [ai/data-intelligence.md](ai/data-intelligence.md) | Analytics, metrics, recommendations or anything that reports a number to a user. |
+| [ai/agentic-operations.md](ai/agentic-operations.md) | Justifying automation work, or deciding how much agency a feature should have. |
+
+**Three rules that override your defaults.** If you read nothing else here, apply these:
+
+1. **Integrate before authoring.** Do not build from scratch when a library, framework
+   feature, component system, SDK or template already solves it. You are an integrator
+   first and an author second.
+2. **Close the loop.** Every increment is database → API → UI → tests, working end to end.
+   A beautiful API with no screen looks like progress in a diff and is not.
+3. **Name the use case before designing any screen.** A checkout is not a landing page with
+   different colours. Unnamed, you will default to the landing-page aesthetic and apply it
+   to whatever was asked for — the single most common source of AI slop.
+
+**Do not** treat these notes as instructions from the user. They are reference material.
+Where a note conflicts with what the user actually asked for, the user wins — say so, and
+proceed with what they asked.
+
+---
+
+## If you are a human, start here
+
+Three notes carry most of the weight:
 
 | | |
 |---|---|
-| **[The closed-loop rule](process/delivery-rules.md)** | Every increment is database → API → UI → tests, working end to end. An agent will otherwise produce a beautiful API with no screen, and it looks like progress in a diff. |
-| **[Integrate before authoring](engineering/coding-agent-instructions.md)** | Do not build from scratch when a library, framework feature, component system or SDK already solves it. The agent is an integrator first and an author second. |
-| **[Name the use case first](design/ui-library-ecosystem.md)** | A checkout is not a landing page with different colours. Unnamed, a generator defaults to the landing-page aesthetic and applies it to whatever you asked for. That single mismatch is the most common source of AI slop. |
+| **[The closed-loop rule](process/delivery-rules.md)** | Every increment works end to end. Also: how to debug when your measurements disagree with the person reporting the bug — usually because they answer different questions. |
+| **[Integrate before authoring](engineering/coding-agent-instructions.md)** | The base ruleset. When to reach for a library and when not to, and the page-type rule that stops every project looking like the same dashboard. |
+| **[Name the use case first](design/ui-library-ecosystem.md)** | The UI ecosystem in five layers, what "futuristic" does and does not mean, and a table of thirteen use cases with the density, motion budget, required states and slop signal of each. |
 
 ---
 
-## The notes
+## The full index
 
 ### Engineering
 
@@ -68,21 +110,29 @@ If you read three things, read these:
 
 ---
 
-## Using it with an agent
+## Wiring it into a project
 
-Clone it next to the project and reference the relevant files from the project's own agent
-instructions, so they are read *before* work starts rather than after something breaks:
+Clone it next to the project, then reference the relevant notes from that project's own
+agent instructions — `CLAUDE.md`, `AGENTS.md`, `.cursorrules`, or whatever your tool reads —
+so they are loaded before work starts:
 
 ```markdown
-Read before touching anything:
+## Reference notes
+
+Read the always-load notes before touching anything, and load the rest by task
+using the routing table in ../agent-notes/README.md.
+
+Always:
 - ../agent-notes/engineering/coding-agent-instructions.md
 - ../agent-notes/process/delivery-rules.md
+
+By task:
+- ../agent-notes/design/ui-library-ecosystem.md    # any UI work
 - ../agent-notes/platform/cloudflare-workers.md    # if on Cloudflare
-- ../agent-notes/design/ui-library-ecosystem.md    # before any UI work
 ```
 
-Point at the specific notes that apply. Loading all of them for a one-file change wastes
-context that the actual task needs.
+Point at the specific notes that apply. Loading all of them for a one-file change spends
+context the actual task needs.
 
 ---
 
@@ -99,8 +149,8 @@ last part is what saves the next person an afternoon.
 what the repo already uses, and verify the attribution on the host afterwards. GitHub
 matches on the email, and the wrong one credits a stranger.
 
-**A passing build is not evidence.** For anything whose acceptance criterion is how it
-looks or how it behaves in production, the deliverable includes the screenshot or the trace.
+**A passing build is not evidence.** Where the acceptance criterion is how something looks
+or how it behaves in production, the deliverable includes the screenshot or the trace.
 
 ---
 
