@@ -220,3 +220,11 @@ continued, and it **redeployed the previous build**. Rules: `set -o pipefail`; m
 created); write long outputs to a file and check `$?` explicitly; and after every deploy,
 verify the live version endpoint equals the stamp you committed — that check is what caught
 it.
+
+## Verify a vendor's "free" claim from THEIR docs before committing to it
+"Free tier" routinely does not mean "free API". A tracking vendor's free plan advertised everything,
+but the API + webhooks were a paid ($59/mo) feature — the free plan was dashboard-only. Cost: a wrong
+integration built and thrown away, plus lost trust. Rule: before choosing a third-party service,
+confirm from the VENDOR'S OWN current docs that the specific capability you need (API access, webhooks,
+the volume) is on the tier you will actually use — never trust a roundup, a summary, or another agent's
+claim. Prefer first-party / carrier-direct free APIs over an aggregator's marketing "free".

@@ -26,3 +26,12 @@ validate on write.
 **What stays code:** a brand-new portal *module* (new screens) is a drop-in plugin; the
 catalogue points at it by id. Everything else — new kinds, what they grant, who has them —
 is data.
+
+## Capability-gated visibility can look like "nothing works"
+When portal sections are gated on a tenant's capabilities, a tenant with NO capability assigned sees a
+near-empty app — correct by design, but indistinguishable from a broken/old build to whoever is
+testing. Two lessons: (1) when a "the new features didn't show up" report arrives, check the test
+account's capabilities/data before suspecting the deploy; (2) don't gate MUST-SEE work purely on a
+capability flag — if a partner was actually assigned an order but lacks the capability that unlocks the
+"My Work" section, they can't see work they were given. Gate on "has assigned work OR holds the
+capability", or make assignment imply the capability.

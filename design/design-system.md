@@ -235,3 +235,11 @@ Non-negotiable, and mostly free because Radix does the hard part:
 - [ ] Keyboard navigable; focus visible.
 - [ ] Real data or an honest empty state.
 - [ ] Nothing from §7.
+
+## Full width — no side margins
+Operational apps fill the available width. Do NOT wrap page content in a centered max-width container
+(`max-w-* mx-auto`) — it leaves empty left/right margins that read as a marketing site and is a common
+generated-design tell. The page's own padding is the only gutter; the sidebar is the left edge, the
+viewport the right. If one surface (a new portal) adds a `max-w-[Npx]` wrapper while the rest of the
+app is full-bleed, the two stop reading as one product. Component-internal max-widths (a chat bubble at
+`max-w-[85%]`, a search box) are fine — this is about the page container.

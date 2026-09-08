@@ -46,3 +46,36 @@ fanning out.
   chain that quietly redeployed the previous build.
 - Shell gotchas that bit: `grep -c` exits 1 on zero matches (under `pipefail` that kills a
   chain — use `! grep -q`); piping a gating command into `tail` masks its exit code.
+
+## Orchestrating many agents on one feature — what actually worked (2026-09)
+
+A large feature (a partner portal + two-leg logistics, ~30 slices) shipped in a day across dozens of
+parallel subagents. The pattern that held:
+
+- **Foundation first, then fan out.** One agent builds the schema + the security/scoping spine + the
+  first vertical slice, and its report states the EXACT table/column names and the scoping call. Only
+  then fan out — every later slice builds against a fixed, named contract, never a guess.
+- **Put ALL of a feature's new tables in ONE migration in that foundation slice**, even tables whose
+  API/UI land later. Parallel slices then add API/UI only and never race on migration numbers. When a
+  later table genuinely needs its own migration, hand each agent its number explicitly.
+- **Branch fan-out slices from the integrated tip, not a stale base.** Slices cut from an old base
+  re-conflict on every shared file forever; branch them off "what's deployed now".
+- **Every agent does a whole vertical slice** (DB→API→UI→tests), never a headless fragment. "More
+  agents" = more full slices in parallel, not splitting one slice below the closed-loop line.
+- **File-disjoint parallelism is free; shared-file parallelism costs integration.** Slices touching
+  different areas (partner UI vs admin UI vs a new provider) merge clean; slices all appending to the
+  same router / client-api / test file all additively conflict — fine, but plan for it.
+- **Delegate multi-branch integration to a dedicated integration agent.** Hand-editing large,
+  interleaved route files to merge N green branches is error-prone; an agent that sees whole files and
+  runs the FULL test suite as the correctness net is far more reliable. Its job: keep BOTH sides of
+  every additive conflict, repoint any moved module, prove typecheck+build+suite green. Review its
+  report (especially that security/boundary tests survived), then deploy.
+- **An agent reporting "this already exists" is a win, not waste.** Spec every agent to stop and report
+  if the feature already ships — several did, beating duplicated code.
+
+### SCAR: `git stash` is shared across all worktrees of a repo
+Each agent gets its own worktree (separate index/HEAD) but they SHARE one `.git`, and `refs/stash` is
+global. Concurrent `git stash`/`pop` across agents scrambles the stack: an agent's tree fills with a
+sibling's changes and its own edits vanish. **Rule: never `git stash` in a multi-worktree/multi-agent
+setup** — commit to the branch, or use patch files / a scratch branch. Put the ban in every agent
+prompt. (Cost: two agents corrupted mid-run before it was caught.)

@@ -350,3 +350,23 @@ redirect/JSON, no `cf-mitigated` header), the app is fine — wait, then retry.
 **So:** after adding a custom domain, give it a few minutes before debugging a flaky
 cross-host/edge 403 on it. And keep Turnstile **pre-clearance off** so its zone-scoped
 `cf_clearance` never adds to the noise.
+
+## Wrangler / deploy scars (2026-09)
+
+- **`wrangler d1 migrations apply <db> --remote` needs `CLOUDFLARE_ACCOUNT_ID` in the environment even
+  when `account_id` is in `wrangler.jsonc`.** `wrangler deploy` reads `account_id` from config fine;
+  the `d1 migrations` subcommand does not and errors asking you to pick an account. Prefix it:
+  `CLOUDFLARE_ACCOUNT_ID=<id> npx wrangler d1 migrations apply <db> --remote`. Non-interactive shells
+  auto-confirm the "db may be unavailable during migration" prompt.
+- **Bump the build/version stamp BEFORE `vite build`, not after.** The SPA polls `/api/version`;
+  building then bumping ships a stale stamp and the reload prompt never fires. Order: stamp → build →
+  deploy → `curl /api/version` to confirm the new stamp is actually live.
+- **Migrations apply by filename, tolerating gaps**, so parallel branches can use non-contiguous
+  numbers (a branch at 0034 adds 0036 while another adds 0035); once combined, wrangler applies
+  whichever are pending — they just must not depend on each other.
+- **Provider credentials need not be Wrangler secrets.** A workable alternative an owner may prefer: an
+  encrypted `provider_secrets` D1 table (AES-256-GCM via `crypto.subtle`, random IV per value, ONE
+  master key kept as the single Wrangler secret), written from a settings UI as MASKED, WRITE-ONLY
+  fields (the API never echoes a value back), resolved store-first with an env fallback so nothing
+  breaks while migrating off secrets. Don't assert "secrets must live in Wrangler" as a hard rule —
+  it's a product choice; ask.

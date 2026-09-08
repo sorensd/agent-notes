@@ -244,3 +244,10 @@ sample CSV** link every time, validates the whole file first and shows the rows 
 quarantine (bad values are set aside, never coerced), then commits idempotently — running the
 same file twice changes nothing. Rosters get one Import with tabs (CSV / paste text / AI
 reader) and a preview before anything is added.
+
+## SPA build-version poll + reload prompt (per entry)
+A single-page app loads its JS once; after a deploy, anyone with the tab already open keeps running the
+OLD bundle until reload — which reliably produces a "my changes didn't ship" panic that is actually a
+stale tab. Ship a small poll of a `/version` endpoint that shows a "new version — reload" prompt when
+it changes. If the build has multiple entry HTMLs (e.g. an admin app and a partner portal), EACH entry
+needs the poll — having it on one and not the other stranded exactly the users who lacked it.
