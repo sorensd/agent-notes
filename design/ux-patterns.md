@@ -245,9 +245,18 @@ quarantine (bad values are set aside, never coerced), then commits idempotently 
 same file twice changes nothing. Rosters get one Import with tabs (CSV / paste text / AI
 reader) and a preview before anything is added.
 
-## SPA build-version poll + reload prompt (per entry)
-A single-page app loads its JS once; after a deploy, anyone with the tab already open keeps running the
-OLD bundle until reload — which reliably produces a "my changes didn't ship" panic that is actually a
-stale tab. Ship a small poll of a `/version` endpoint that shows a "new version — reload" prompt when
-it changes. If the build has multiple entry HTMLs (e.g. an admin app and a partner portal), EACH entry
-needs the poll — having it on one and not the other stranded exactly the users who lacked it.
+## "My changes didn't ship" — read the build stamp before theorising
+
+A single-page app loads its JS once, so a tab opened before a deploy keeps running the old bundle until
+reload. That makes "stale tab" a tempting explanation for any *"the new features aren't there"* report.
+Resist it.
+
+**Read the build stamp the UI already shows** (see *Telling people the app changed*). If it matches what
+you deployed, the deploy is fine and the cause is elsewhere — most often **permissions / capability
+gating**, empty data, or the wrong account or tenant. On one such report the screenshot already showed
+the current stamp, and the real cause was a tenant with **zero capabilities**, so every capability-gated
+section was correctly hidden; "stale tab" had been asserted twice before anyone checked.
+
+Two habits fall out of it: verify the claim in the code or the running app before naming a cause, and if
+the build has multiple entry HTMLs (an admin app and a partner portal), *check* that each entry mounts
+the update prompt rather than assuming it does or doesn't.
