@@ -31,6 +31,7 @@ those files before writing code — not after something breaks.
 | [engineering/roles-vs-capabilities.md](engineering/roles-vs-capabilities.md) | Permissions, roles, multi-tenancy, or access control for external parties. |
 | [engineering/cross-host-impersonation.md](engineering/cross-host-impersonation.md) | Sessions across two hosts, "log in as", or handing authentication between origins. |
 | [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | Cloudflare Workers, D1, R2, KV, Turnstile, Wrangler or Better Auth. |
+| [platform/fast-data-hydration.md](platform/fast-data-hydration.md) | **Any screen that loads data on Workers + D1.** One loader per screen, a query ceiling per request, read replicas, push not polling, and the two tests that stop regressions. Also the retrofit order for a system that already feels slow. |
 | [process/parallel-agent-slices.md](process/parallel-agent-slices.md) | Running several agents in parallel, worktrees, or coordinating slices of one change. |
 | [process/skills-and-tooling.md](process/skills-and-tooling.md) | Installing a skill, plugin or harness, or picking tooling for a chosen stack. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Analytics, metrics, recommendations or anything that reports a number to a user. |
@@ -89,6 +90,7 @@ Three notes carry most of the weight:
 | Note | What it covers |
 |---|---|
 | [cloudflare-workers](platform/cloudflare-workers.md) | 21 traps on Workers, D1, R2, Turnstile and Better Auth. Symptom → cause → fix. Most are invisible to `curl` and to unit tests. |
+| [fast-data-hydration](platform/fast-data-hydration.md) | Why screens on Workers + D1 hydrate slowly (calls per screen, queries per number, data on the load path, polling) and the rules, budgets and two tests that keep them instant. Includes the retrofit order for an existing system. |
 
 ### Design
 
@@ -129,6 +131,7 @@ Always:
 By task:
 - ../agent-notes/design/ui-library-ecosystem.md    # any UI work
 - ../agent-notes/platform/cloudflare-workers.md    # if on Cloudflare
+- ../agent-notes/platform/fast-data-hydration.md   # any screen that loads data
 ```
 
 Point at the specific notes that apply. Loading all of them for a one-file change spends

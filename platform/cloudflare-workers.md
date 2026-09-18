@@ -132,6 +132,9 @@ timestamp for display.
 It does not become an `IN (?, ?, ?)` list. Use `inArray(table.column, values)`. Silent wrong
 results, not an error.
 
+> Items 10–13 below are the individual scars. The portable rule set that prevents all of them
+> together, with tests, is in [fast-data-hydration.md](fast-data-hydration.md).
+
 ## 10. Aggregate in one query, not one query per number
 
 **Symptom (outreach engine).** A dashboard polling a dozen separate `COUNT(*)` queries put
