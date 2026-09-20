@@ -373,3 +373,66 @@ cross-host/edge 403 on it. And keep Turnstile **pre-clearance off** so its zone-
   fields (the API never echoes a value back), resolved store-first with an env fallback so nothing
   breaks while migrating off secrets. Don't assert "secrets must live in Wrangler" as a hard rule —
   it's a product choice; ask.
+
+## A release test must start from the previous release's data (2026-09)
+
+**Symptom.** A new module shipped, every test was green, and in any environment that had been
+deployed before, nobody could use it: every route answered 403.
+
+**Cause.** Permissions and default role grants were seeded from code on the first request of a
+build. The seeder skipped any role that already had grants, to respect edited roles. On a fresh
+database every role is empty, so tests seeded everything. On a database one release old, every
+role already had grants, so the new module's keys were never granted to anyone.
+
+**Fix.** Seed a default grant when the role has never been seeded, **or** when the permission key
+is new to the catalogue, **or** when no role holds the key at all. A key that already existed and
+that some role holds is never re-granted, so edits survive.
+
+**The rule.** Anything that seeds or migrates data from code needs a test that starts from the
+*previous release's* state, not from empty: rewind the database to "before this feature existed",
+run the release, assert the outcome. Fresh-database tests prove install; they prove nothing about
+upgrade, and every production deploy is an upgrade. A local seed script that is re-run against a
+long-lived dev database finds these for free.
+
+Related: if a once-per-build sync is keyed to a build stamp, a deploy that adds permissions
+without bumping the stamp never runs the sync. Bump the stamp before every build.
+
+## SQLite unique indexes do not see NULLs as equal (D1)
+
+**Symptom.** A "global" row (`tenant_id IS NULL`) was inserted twice despite
+`UNIQUE (scope, role, tenant_id, permission_key)`.
+
+**Cause.** In SQLite, NULLs are distinct in a unique index, so two rows that differ only by both
+having `tenant_id NULL` do not conflict. Two Worker isolates ran the first sync of a build at the
+same moment and both inserted the global matrix.
+
+**Fix.** A partial unique index for the NULL case, then conflict-safe inserts:
+
+```sql
+CREATE UNIQUE INDEX role_permissions_global_uq
+  ON role_permissions (scope, role, permission_key) WHERE tenant_id IS NULL;
+```
+
+**The rule.** Any uniqueness that involves a nullable column needs a partial index per NULL
+pattern, and any once-per-deploy job will run concurrently in more than one isolate: make it
+idempotent at the database, not with an in-memory flag.
+
+## D1's 100 bound parameters count every column, not the ones you set
+
+Drizzle binds a value for every column of the table on a multi-row insert, including defaults.
+A 17-column table fits five rows per statement, not the seven you get by counting the columns
+you passed. Chunk by `floor(100 / total columns)` and put the chunks in one `db.batch`.
+
+## A transaction cannot be made conditional on "one row changed"
+
+`db.batch` is a transaction, but it does not roll back because an `UPDATE ... WHERE available`
+matched nothing. For "take the slot, then write the booking": run the conditional update alone,
+check `meta.changes === 1`, then run the rest as one batch and release the slot if that batch
+throws. Serialise callers through a Durable Object so the check and the take cannot interleave;
+keep the conditional update and a unique index as the last line of defence.
+
+## Responses from a Durable Object stub or the assets binding are immutable
+
+Middleware that adds headers after `next()` throws "Can't modify immutable headers" on them. Copy
+first: `new Response(res.body, { status, headers: new Headers(res.headers) })`, and for a
+WebSocket upgrade `new Response(null, { status: 101, webSocket: res.webSocket })`.
