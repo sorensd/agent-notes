@@ -34,6 +34,7 @@ those files before writing code — not after something breaks.
 | [platform/fast-data-hydration.md](platform/fast-data-hydration.md) | **Any screen that loads data on Workers + D1.** One loader per screen, a query ceiling per request, read replicas, push not polling, and the two tests that stop regressions. Also the retrofit order for a system that already feels slow. |
 | [process/parallel-agent-slices.md](process/parallel-agent-slices.md) | Running several agents in parallel, worktrees, or coordinating slices of one change. |
 | [process/skills-and-tooling.md](process/skills-and-tooling.md) | Installing a skill, plugin or harness, or picking tooling for a chosen stack. |
+| [process/duration-estimation.md](process/duration-estimation.md) | Estimating how long agent-built work will take, or generating a phased plan with slices, gates and totals. Measured agent-hours, not person-days. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Analytics, metrics, recommendations or anything that reports a number to a user. |
 | [ai/agentic-operations.md](ai/agentic-operations.md) | Justifying automation work, or deciding how much agency a feature should have. |
 
@@ -84,6 +85,7 @@ Three notes carry most of the weight:
 | [delivery-rules](process/delivery-rules.md) | The closed-loop rule, deploying small, authorisation, auditing, deletes and undo, and how to debug when your measurements disagree with the person reporting the bug. |
 | [parallel-agent-slices](process/parallel-agent-slices.md) | Fanning out agent slices in worktrees: reserve migration numbers, name the always-conflicting files, exclude worktrees from tests, stalled coordinators, rebase small onto big, gate and ship without masking a failure. |
 | [skills-and-tooling](process/skills-and-tooling.md) | Choosing a technology means finding its skills too — and never install a skill unsighted. How to scan one, how to read its noise, and whether a big harness earns its keep. |
+| [duration-estimation](process/duration-estimation.md) | Estimate in agent-hours per closed-loop slice, sized by shape; keep calendar time separate and driven by named gates. Measured on one build: a 22-day estimate shipped in four hours; slices take 2–5 h. How to generate the plan from the estimator. |
 
 ### Platform
 
