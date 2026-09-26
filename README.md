@@ -30,7 +30,7 @@ those files before writing code — not after something breaks.
 | [engineering/api-versioning.md](engineering/api-versioning.md) | Designing or changing an HTTP API surface. |
 | [engineering/roles-vs-capabilities.md](engineering/roles-vs-capabilities.md) | Permissions, roles, multi-tenancy, or access control for external parties. |
 | [engineering/cross-host-impersonation.md](engineering/cross-host-impersonation.md) | Sessions across two hosts, "log in as", or handing authentication between origins. |
-| [engineering/closed-sign-in-otp.md](engineering/closed-sign-in-otp.md) | Any sign-in flow: one-time codes for every human, no self-created accounts, membership granted not invited, and the traps (masking the library, bootstrap, route allowlist, lockout via per-email caps). |
+| [engineering/closed-sign-in-otp.md](engineering/closed-sign-in-otp.md) | Any sign-in flow: **staff and customers are two identity systems (separate tables, sessions, endpoints, pages)**, one-time codes for customers, password + authenticator for staff, no self-created accounts, membership granted not invited, and the traps (masking the library, bootstrap, route allowlist, lockout via per-email caps). |
 | [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | Cloudflare Workers, D1, R2, KV, Turnstile, Wrangler or Better Auth. |
 | [platform/fast-data-hydration.md](platform/fast-data-hydration.md) | **Any screen that loads data on Workers + D1.** One loader per screen, a query ceiling per request, read replicas, push not polling, and the two tests that stop regressions. Also the retrofit order for a system that already feels slow. |
 | [process/parallel-agent-slices.md](process/parallel-agent-slices.md) | Running several agents in parallel, worktrees, or coordinating slices of one change. |
@@ -78,7 +78,7 @@ Three notes carry most of the weight:
 | [api-versioning](engineering/api-versioning.md) | Why `/api/v1` belongs in the path from the first endpoint — path vs header, what stays unversioned, how retirement is announced. |
 | [roles-vs-capabilities](engineering/roles-vs-capabilities.md) | Roles for staff (few, fixed, a matrix); capabilities plus membership standing for external parties (data, N kinds, permissions computed per request, server-enforced). |
 | [cross-host-impersonation](engineering/cross-host-impersonation.md) | "Log in as" across two hosts that share no cookie: a hash-only single-use grant, no token in any URL, and the auth library's own session primitives. |
-| [closed-sign-in-otp](engineering/closed-sign-in-otp.md) | Closed sign-in with one-time codes: no passwords, rows only from admin actions, identical responses for unknown emails without storing them, membership granted not invited; the library-masking, bootstrap, route-allowlist and cap-keying traps. |
+| [closed-sign-in-otp](engineering/closed-sign-in-otp.md) | Staff and customers as two identity systems sharing nothing (tables, sessions, endpoints, pages, plugin lists); closed sign-in; codes for customers, password + authenticator for staff; rows only from admin actions; membership granted not invited; the library-masking, bootstrap, route-allowlist and cap-keying traps. |
 
 ### Process
 

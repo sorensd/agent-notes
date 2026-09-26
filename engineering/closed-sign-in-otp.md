@@ -22,6 +22,40 @@ first. It is short because the rules are few; the value is in the traps undernea
    service rotates, bearer tokens for agents, enrollment codes: these stay. The rule is that
    no human is ever asked to type or remember a secret.
 
+## Staff and customers are two identity systems, not two roles
+
+The single most expensive design mistake in this area: one auth library instance, one
+`user` table, one session cookie, one `/api/auth/*` prefix, with staff and customers told
+apart by a role column and route allowlists. It is what a library's quick start produces and
+it is wrong for any product where staff operate on customers.
+
+**Rule:** staff identity and customer identity share nothing. Separate tables (`staff_*`
+and `customer_*`, never a bare `user`), separate sessions with different cookie names and
+different secrets, separate endpoint prefixes (`/api/ops/auth/*` vs `/api/auth/*`),
+separate sign-in pages, and disjoint plugin lists (the staff instance has no code-based
+sign-in; the customer instance has no password plugin). Two instances of the same library
+with different configuration is the cheap way to get this.
+
+Why it matters:
+
+- **Isolation by construction, not by allowlist.** A customer session cannot satisfy a
+  staff route because the staff middleware only reads the staff table. No allowlist can
+  drift, no role column can be flipped, no shared endpoint can be reached by the wrong
+  audience.
+- **Different threat models, different controls.** Staff get password + authenticator,
+  tight lockouts, an undisclosed base path, and a WAF rule scoped to it. Customers get
+  one-time codes, anti-enumeration, and a bot challenge under abuse. Sharing one instance
+  forces one set of compromises onto both.
+- **Different lifecycles.** Staff are a handful of rows created by administrators; customers
+  are many rows created by tenant admins. Separate tables keep every customer query away
+  from staff data and make audits and exports trivial.
+- **A discreet staff surface.** The staff console lives under a base path that customer
+  pages never link to, with `X-Robots-Tag: noindex`, unknown paths under it indistinguishable
+  from any other 404, and the path configurable so it can be a long random slug.
+
+Retrofitting this after the fact costs a migration rewrite and a fixture rewrite across every
+test. Decide it before the first table is created.
+
 ## Why closed beats open
 
 The open version ("any email that verifies a code gets a row") is the default an auth
