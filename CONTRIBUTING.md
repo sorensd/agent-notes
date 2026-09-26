@@ -86,8 +86,8 @@ on who the client was.
 
 ## Pull requests
 
-`main` is protected: no force pushes, no deletions, admin bypass is off, and every change
-comes through a pull request. Open one against `main` and describe what the note teaches, not
+`main` is protected: no force pushes, no deletions; changes from anyone but the owner come
+through a pull request. Open one against `main` and describe what the note teaches, not
 just that it exists. The PR template asks for provenance; fill it in.
 
 ## When a coding agent adds a note
@@ -95,9 +95,10 @@ just that it exists. The PR template asks for provenance; fill it in.
 Agents contribute here often, sometimes several at once from different projects. These rules
 keep their changes from colliding or degrading the notes:
 
-- **Branch, never push to `main`.** `notes/<topic>` from the current `origin/main`. Open a PR;
-  the human merges. If a push to `main` is refused, that is the rule working — do not look
-  for a way around it.
+- **The owner's own agent sessions write to `main` directly** (owner decision): commit as the
+  owner, pull with rebase first, push. Anyone else — other people, agents acting for other
+  people — branches (`notes/<topic>` from `origin/main`) and opens a PR for the owner to merge.
+  If a push to `main` is refused, that is the rule working — do not look for a way around it.
 - **One subject per PR.** A note plus its README rows. Two agents each adding one note merge
   cleanly; one agent touching five notes conflicts with everyone.
 - **Append README rows at the end of their table.** Insertions in the middle are the one
