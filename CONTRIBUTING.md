@@ -86,5 +86,31 @@ on who the client was.
 
 ## Pull requests
 
-`main` is protected: no force pushes, no deletions, and changes come through a pull request.
-Open one against `main` and describe what the note teaches, not just that it exists.
+`main` is protected: no force pushes, no deletions, admin bypass is off, and every change
+comes through a pull request. Open one against `main` and describe what the note teaches, not
+just that it exists. The PR template asks for provenance; fill it in.
+
+## When a coding agent adds a note
+
+Agents contribute here often, sometimes several at once from different projects. These rules
+keep their changes from colliding or degrading the notes:
+
+- **Branch, never push to `main`.** `notes/<topic>` from the current `origin/main`. Open a PR;
+  the human merges. If a push to `main` is refused, that is the rule working — do not look
+  for a way around it.
+- **One subject per PR.** A note plus its README rows. Two agents each adding one note merge
+  cleanly; one agent touching five notes conflicts with everyone.
+- **Append README rows at the end of their table.** Insertions in the middle are the one
+  conflict that recurs. The human reorders later if it matters.
+- **Extend before creating.** Grep the repo for the symptom first. A second note on the same
+  subject means neither is read; add a section to the existing one and link back.
+- **State only what you verified.** A vendor price, a licence, a default, a limit: fetched
+  from the vendor's own page or repository during the task, with the date, or written as
+  "to verify". Recall is not a source.
+- **Anonymise as you write, not after.** No project names, hostnames, ticket links, client
+  names. The technical content never depends on who the client was.
+- **Do not edit the always-load notes casually.** `coding-agent-instructions.md` and
+  `delivery-rules.md` are loaded into every session; a change there costs every future task
+  tokens. Prefer a new routed note and a one-line pointer.
+- **Commit as the human** who is running you, with their name and email, no co-author
+  trailers, in the repo's `area: ...` message style.
