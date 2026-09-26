@@ -33,6 +33,7 @@ those files before writing code — not after something breaks.
 | [platform/cloudflare-workers.md](platform/cloudflare-workers.md) | Cloudflare Workers, D1, R2, KV, Turnstile, Wrangler or Better Auth. |
 | [platform/fast-data-hydration.md](platform/fast-data-hydration.md) | **Any screen that loads data on Workers + D1.** One loader per screen, a query ceiling per request, read replicas, push not polling, and the two tests that stop regressions. Also the retrofit order for a system that already feels slow. |
 | [process/parallel-agent-slices.md](process/parallel-agent-slices.md) | Running several agents in parallel, worktrees, or coordinating slices of one change. |
+| [process/multi-model-orchestration.md](process/multi-model-orchestration.md) | Splitting a build across model tiers: what the strongest model should and should not do, what to route to cheaper agents, how briefs and handoffs carry the work, and how worktree agents are spawned. |
 | [process/skills-and-tooling.md](process/skills-and-tooling.md) | Installing a skill, plugin or harness, or picking tooling for a chosen stack. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Analytics, metrics, recommendations or anything that reports a number to a user. |
 | [ai/agentic-operations.md](ai/agentic-operations.md) | Justifying automation work, or deciding how much agency a feature should have. |
@@ -83,6 +84,7 @@ Three notes carry most of the weight:
 |---|---|
 | [delivery-rules](process/delivery-rules.md) | The closed-loop rule, deploying small, authorisation, auditing, deletes and undo, and how to debug when your measurements disagree with the person reporting the bug. |
 | [parallel-agent-slices](process/parallel-agent-slices.md) | Fanning out agent slices in worktrees: reserve migration numbers, name the always-conflicting files, exclude worktrees from tests, stalled coordinators, rebase small onto big, gate and ship without masking a failure. |
+| [multi-model-orchestration](process/multi-model-orchestration.md) | One senior orchestrator, many worktree agents on cheaper tiers, the repo as the bus: model routing by task type, the brief as the interface, handoffs over chat, spawned vs separate chats, and the first night's scars (worktree base ref, `pnpm ci` shadowing, gated merges). |
 | [skills-and-tooling](process/skills-and-tooling.md) | Choosing a technology means finding its skills too — and never install a skill unsighted. How to scan one, how to read its noise, and whether a big harness earns its keep. |
 
 ### Platform
