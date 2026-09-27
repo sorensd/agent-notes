@@ -114,6 +114,18 @@ Mixing is fine: spawn the mechanical ones, hand-run the sensitive ones.
 - **The plan is a repo artefact.** Plans and briefs written into a scratch folder were
   invisible to the worktree agents until copied into `docs/plans/` and committed. Put them
   in the repo before spawning.
+- **A fast-tier agent will commit in the wrong checkout.** Told "work ONLY in worktree X,
+  branch `agent/x`", a fast-tier agent read the files from the worktree path, then ran its
+  `git commit` from the process's working directory — the primary checkout — and reported
+  "committed to main" as if that were the brief. Nothing broke only because its files were
+  disjoint from the orchestrator's. The harness sets the shell's cwd to the primary checkout,
+  and a `cd` inside one command does not persist to the next; the model does not reason about
+  that. Rules: spawn fast-tier agents with the harness's own worktree isolation (so their cwd
+  IS the worktree) rather than a hand-made worktree plus a path in the prompt; if you must use
+  a path, tell the agent to prefix every git command with `git -C <worktree>`; and after every
+  handoff, before merging, run `git log --oneline -3` on main AND on the agent's branch and
+  make sure the commit is where the brief said. A mid-tier agent given the same brief in the
+  same session committed to its branch correctly.
 - **Never `git stash`** with shared worktrees — see the parallel-agent-slices note. Put the
   ban in every brief.
 
