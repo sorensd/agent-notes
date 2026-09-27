@@ -436,3 +436,27 @@ keep the conditional update and a unique index as the last line of defence.
 Middleware that adds headers after `next()` throws "Can't modify immutable headers" on them. Copy
 first: `new Response(res.body, { status, headers: new Headers(res.headers) })`, and for a
 WebSocket upgrade `new Response(null, { status: 101, webSocket: res.webSocket })`.
+
+## Hibernation API: do not echo a received close code 1005 back to the socket
+
+**Symptom.** A Durable Object's `webSocketClose(ws, code, reason, wasClean)` handler crashes
+every time a client closes without an explicit code: `InvalidAccessError: Invalid WebSocket
+close code: 1005`. The error comes from inside the handler itself, thrown by calling
+`ws.close(code, reason)`.
+
+**Cause.** When a client closes without specifying a code, the wire negotiates code `1005`
+("no status received") — a value the WebSocket spec reserves for exactly that case and
+**forbids you from sending**. A natural-looking "acknowledge the client's close" pattern is to
+call `ws.close(code, reason)` inside the `webSocketClose` handler with that received code.
+Cloudflare's own documentation shows this pattern. But if the received code is `1005`, the
+call throws.
+
+**Fix.** Do not call `ws.close()` inside `webSocketClose()` at all. At `compatibility_date`
+`≥ 2026-04-07` (`web_socket_auto_reply_to_close`), the runtime auto-replies to close frames
+automatically — Cloudflare's own doc comment says "calling close() is safe but no longer
+required", which understates it: for code `1005` it is actively unsafe. Make the handler a
+no-op or return early.
+
+**Why it was hard.** Unit tests that explicitly pass `.close()` with a code never hit this.
+Browser tabs and most client libraries close with no code, so the trap is invisible locally
+and only surfaces in integration tests or production with real clients.
