@@ -21,6 +21,7 @@ those files before writing code — not after something breaks.
 |---|---|
 | [engineering/coding-agent-instructions.md](engineering/coding-agent-instructions.md) | **Always.** Any code-writing task. It is the base ruleset the others assume. |
 | [process/delivery-rules.md](process/delivery-rules.md) | **Always.** Shipping anything, deciding what "done" means, or debugging a report you cannot reproduce. |
+- [Messages for chat apps](process/messages-for-chat-apps.md) — status updates and client replies the user pastes into WhatsApp/Slack: one fenced block, the app's own markup, never rendered Markdown
 | [design/ui-library-ecosystem.md](design/ui-library-ecosystem.md) | Any UI work at all. Contains the use-case table you must classify the screen against before designing it. |
 | [design/design-refactor.md](design/design-refactor.md) | A UI that already exists and is being restyled, modernised, or de-slopped. |
 | [design/generating-ui.md](design/generating-ui.md) | Producing a new visual design, or writing a brief for something else to generate one. |
