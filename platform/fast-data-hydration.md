@@ -72,6 +72,55 @@ rules are portable to any Workers + D1 project.
 - Code split per route; set a first-load JavaScript budget (≈150 KB gzipped for a console)
   and fail the build when it is exceeded.
 
+## Client-side readiness: do not start the journey on the click
+
+**Owner requirement (November 2026):** architect every customer, partner and staff surface
+for immediate interaction, small downloads and ready-to-use critical paths. This is a design
+constraint from the beginning, not a promise that a third-party network call is instant.
+
+**Observed failure.** A checkout waited for its payment-start API and only then downloaded
+its payment SDK. A fast API could not make that serial waterfall feel fast. Rebuilding the
+same server checkout repeatedly also hid behind one apparently simple browser request.
+
+- **Load essential interaction code before the action.** Frequent controls, form validation
+  and the next required checkout step must not start a cold chunk/SDK download only when
+  clicked. Warm the selected checkout SDK while details are being entered, without creating
+  an intent, buying anything or capturing money. Observe vendor/privacy/consent constraints.
+- **Do not eagerly download the whole application.** Keep route splitting; prefetch the
+  likely next route/dialog on hover, keyboard focus, touch intent or bounded idle time.
+  Prioritize visible and probable work; deduplicate in-flight downloads, limit concurrency,
+  respect data-saving connections and discard obsolete speculative work. Rare heavy tools
+  stay isolated, with explicit progress if their first use really must wait.
+- **Parallelize independent work.** Fetch route code and authorized first-paint data together;
+  do not chain component import → effect → configuration → SDK → data when dependencies do
+  not require it. Keep one owner for each shared request/provider initialization.
+- **Keep the main thread free.** Avoid giant synchronous parsing, repeated serialization,
+  sorting on every render, full-table DOM and unbounded layout work. Use pagination or
+  virtualization where measured; batch DOM reads/writes. Move substantial CPU work to a
+  worker only when transfer/coordination costs earn it. IndexedDB is asynchronous storage,
+  not a CPU worker: do not put cache hydration on the critical render path.
+- **Cache only safe, scoped data.** Reuse the existing query cache with explicit freshness,
+  identity/tenant keys and invalidation; clear private state on sign-out/account changes.
+  Never persist payment secrets or use stale client prices, permissions, stock or balances
+  as authority. Warm public SDK code, not transactions or privileged operations.
+- **Respond immediately without pretending success.** Preserve entered details; show the
+  selected/loading state within a frame where possible. Financial/security actions remain
+  pending until the server/provider confirms. No fake progress or optimistic paid state.
+- **Measure action readiness as well as page load.** Record cold/warm route bytes, request
+  waterfalls, click-to-feedback, click-to-usable and long tasks on a representative phone.
+  Use explicit project budgets and test regressions. Useful starting targets: visible
+  feedback within 100 ms, p75 INP at most 200 ms and p75 LCP at most 2.5 s; provider latency
+  gets its own measured budget, never an invented guarantee. Keep browser and server timing
+  evidence separate; an offline delay simulation is not a production latency measurement.
+- **Acceptance includes failure.** Test slow/blocked SDKs, retry without unhandled promises,
+  double clicks, stale responses, keyboard/touch intent and the no-prefetch fallback.
+  A skeleton or spinner is recovery UI, not evidence the underlying wait was optimized.
+
+**Retrofit order:** capture the actual browser waterfall → remove click-triggered critical
+downloads → remove serial/redundant requests → reduce main-thread work → add byte, query and
+interaction budgets. Preserve security and correctness throughout. See
+[delivery rules](../process/delivery-rules.md#evidence-over-theory-when-debugging).
+
 ## Budgets, measured
 
 - Log **query count and D1 duration per request** in structured logs, and surface them per
