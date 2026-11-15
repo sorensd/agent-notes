@@ -7,6 +7,9 @@ ones that changed outcomes, not the ones that sounded good.
 
 ## The closed-loop rule
 
+For unattended delivery, also follow [usage-aware continuation](usage-aware-continuation.md):
+keep working across verified phases while allowance and authorization permit.
+
 **Every increment is a vertical slice: database → API → UI → tests, working end to end.**
 
 No API-only increments. No frontend shells wired to nothing. When a change merges, a person

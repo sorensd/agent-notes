@@ -40,6 +40,7 @@ those files before writing code — not after something breaks.
 | [process/skills-and-tooling.md](process/skills-and-tooling.md) | Installing a skill, plugin or harness, or picking tooling for a chosen stack. |
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Analytics, metrics, recommendations or anything that reports a number to a user. |
 | [ai/agentic-operations.md](ai/agentic-operations.md) | Justifying automation work, or deciding how much agency a feature should have. |
+| [process/usage-aware-continuation.md](process/usage-aware-continuation.md) | Long-running or unattended work: continue across phases, inspect usage, checkpoint near limits and schedule resumption after reset. |
 
 **Three rules that override your defaults.** If you read nothing else here, apply these:
 
@@ -90,6 +91,7 @@ Three notes carry most of the weight:
 | [parallel-agent-slices](process/parallel-agent-slices.md) | Fanning out agent slices in worktrees: reserve migration numbers, name the always-conflicting files, exclude worktrees from tests, stalled coordinators, rebase small onto big, gate and ship without masking a failure. |
 | [multi-model-orchestration](process/multi-model-orchestration.md) | One senior orchestrator, many worktree agents on cheaper tiers, the repo as the bus: model routing by task type, the brief as the interface, handoffs over chat, spawned vs separate chats, and the first night's scars (worktree base ref, `pnpm ci` shadowing, gated merges). |
 | [skills-and-tooling](process/skills-and-tooling.md) | Choosing a technology means finding its skills too — and never install a skill unsighted. How to scan one, how to read its noise, and whether a big harness earns its keep. |
+| [usage-aware-continuation](process/usage-aware-continuation.md) | Owner preference: phase boundaries are checkpoints, not idle points; check real usage, preserve reserve, schedule the next eligible post-reset resume and continue without duplicate work. |
 
 ### Platform
 
