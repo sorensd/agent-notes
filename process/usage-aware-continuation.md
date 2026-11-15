@@ -31,9 +31,11 @@ automation existed. Neither fact proved that the agent kept working while it cou
    window and reset timestamp; percentages are not an exact token count. Missing data
    means unknown, not zero or unlimited.
 2. Keep enough reserve to finish the current safe unit, save evidence and schedule
-   resumption. Default planning guardrails: checkpoint near 5% short-window remaining;
-   resume with at least 15% short-window and 10% weekly remaining, unless the owner sets
-   different thresholds. Recheck every limiting window; one reset may not unblock work.
+   resumption. Owner correction on 2026-11-15: use the five-hour window only for
+   proactive pauses, checkpoint near 5% remaining and resume after its reset with at
+   least 15% remaining. Do not impose a weekly 10% reserve or wait for the weekly
+   reset while ordinary usage is still permitted. Platform-enforced limits still
+   apply; a five-hour reset does not guarantee that every platform limit is cleared.
 3. Save branch, commits, dirty-file ownership, tests, exact next steps, pending jobs,
    approval boundaries and blockers in the project. Never save plaintext secrets.
 4. Update an existing continuation automation rather than creating a duplicate. Set
