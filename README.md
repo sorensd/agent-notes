@@ -21,7 +21,6 @@ those files before writing code — not after something breaks.
 |---|---|
 | [engineering/coding-agent-instructions.md](engineering/coding-agent-instructions.md) | **Always.** Any code-writing task. It is the base ruleset the others assume. |
 | [process/delivery-rules.md](process/delivery-rules.md) | **Always.** Shipping anything, deciding what "done" means, or debugging a report you cannot reproduce. |
-- [Messages for chat apps](process/messages-for-chat-apps.md) — status updates and client replies the user pastes into WhatsApp/Slack: one fenced block, the app's own markup, never rendered Markdown
 | [design/ui-library-ecosystem.md](design/ui-library-ecosystem.md) | Any UI work at all. Contains the use-case table you must classify the screen against before designing it. |
 | [design/design-refactor.md](design/design-refactor.md) | A UI that already exists and is being restyled, modernised, or de-slopped. |
 | [design/generating-ui.md](design/generating-ui.md) | Producing a new visual design, or writing a brief for something else to generate one. |
@@ -41,6 +40,7 @@ those files before writing code — not after something breaks.
 | [ai/data-intelligence.md](ai/data-intelligence.md) | Analytics, metrics, recommendations or anything that reports a number to a user. |
 | [ai/agentic-operations.md](ai/agentic-operations.md) | Justifying automation work, or deciding how much agency a feature should have. |
 | [process/usage-aware-continuation.md](process/usage-aware-continuation.md) | Long-running or unattended work: continue across phases, inspect usage, checkpoint near limits and schedule resumption after reset. |
+| [process/messages-for-chat-apps.md](process/messages-for-chat-apps.md) | Drafting messages the user will paste into WhatsApp, Slack or another chat app. Use one copyable code block with the target app's own formatting. |
 
 **Three rules that override your defaults.** If you read nothing else here, apply these:
 
@@ -92,6 +92,7 @@ Three notes carry most of the weight:
 | [multi-model-orchestration](process/multi-model-orchestration.md) | One senior orchestrator, many worktree agents on cheaper tiers, the repo as the bus: model routing by task type, the brief as the interface, handoffs over chat, spawned vs separate chats, and the first night's scars (worktree base ref, `pnpm ci` shadowing, gated merges). |
 | [skills-and-tooling](process/skills-and-tooling.md) | Choosing a technology means finding its skills too — and never install a skill unsighted. How to scan one, how to read its noise, and whether a big harness earns its keep. |
 | [usage-aware-continuation](process/usage-aware-continuation.md) | Owner preference: phase boundaries are checkpoints, not idle points; check real usage, preserve reserve, schedule the next eligible post-reset resume and continue without duplicate work. |
+| [messages-for-chat-apps](process/messages-for-chat-apps.md) | Copyable status updates and client replies: one code block, the target app's own formatting, and a clear done / running / next structure. |
 
 ### Platform
 
