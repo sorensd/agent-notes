@@ -207,6 +207,32 @@ previews were already converted to bounded optimized images; that is a separate 
 **Why it was hard to find.** Revision IDs looked stable and deduplicating them looked like a
 performance win. The revision was a container, not the identity of the image bytes.
 
+## A small byte ceiling can turn a fullscreen preview into a thumbnail
+
+**Symptom.** A preview met its byte budget but became too small to inspect artwork clearly.
+
+**Cause.** Lossless WebP encoding was combined with a strict byte ceiling. Repeatedly shrinking
+an image to satisfy that ceiling optimized transfer size by sacrificing the display resolution.
+
+**Design correction under validation, not a deployment claim.** Keep the source dimensions for
+fullscreen previews; resize only thumbnails. Use a server-only lossy WebP encoder with explicit
+quality instead of a lossless encoder followed by arbitrary downscaling. One implementation
+uses the precompiled Workers WASM build of `@jsquash/webp` at quality 82, bounds source pixels
+before decoding, and avoids copying the full RGBA buffer a second time. Focused codec/route
+checks, a near-four-megapixel smoke case and a build passed; those checks alone do not establish
+production latency, visual quality for every source, or final release completion.
+
+Keep original source bytes and format for Download. Show a loader until the selected preview
+has loaded/decoded; reset that state when its URL changes and show an honest error on failure.
+Cache derivatives by immutable file identity, source checksum, transform version and encoding
+parameters so changing quality or dimensions cannot reuse an incompatible old result. Preserve
+authorization checks on cache hits. Never fall back to the heavy original in a preview, and do
+not move image codec WASM into the browser bundle merely to reduce server work.
+
+**Why it was hard to find.** The response headers, format and byte count all looked optimized.
+The lost requirement was readable artwork at fullscreen dimensions, which a byte-only test
+could not prove.
+
 ## A second deployment can silently undo a verified speed fix
 
 **Symptom.** A checkout measured near 0.6 seconds, then returned to about 6.5 seconds after an
