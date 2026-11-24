@@ -121,6 +121,110 @@ downloads → remove serial/redundant requests → reduce main-thread work → a
 interaction budgets. Preserve security and correctness throughout. See
 [delivery rules](../process/delivery-rules.md#evidence-over-theory-when-debugging).
 
+## A fast shell can still hide a five-second checkout
+
+**Observed in a production retrofit, November 2026.** A warm document answered in about
+143 ms, but the same fresh checkout read took 5,447 / 5,519 / 5,480 ms. The endpoint returned
+only about 9 KB. Bundle size and a skeleton alone could not explain or remove this wait.
+
+**Cause.** Independent enrichments ran after one another, totals and lines were rebuilt
+inside the same request, and configuration resolved one credential per database call. The
+client waited for route translations before starting the authorized checkout read. The
+Worker also ran far from its non-replicated database.
+
+**Fix.** Remove the serial work without caching financial authority:
+
+- Run independent authorized enrichments alongside pricing. Preserve each branch's existing
+  failure behavior; optional artwork failing must not silently authorize a payment.
+- Reuse fresh totals and lines only within the same request and exact order. Never replace
+  the later payment/quote writer's fresh checks with the boot response.
+- Join product names into the ordered line query, batch guide metadata/rows, and resolve
+  credential names with a bounded indexed query before decrypting. Preserve store precedence,
+  environment fallback and rotation behavior; do not introduce a credential cache.
+- Start a one-shot checkout transport beside route/locale loading, then hand its exact
+  response to the ordinary query parser. Keep normal error parsing, cancellation and abandoned
+  request cleanup. Exclude payment-return paths and do not reuse it for later reads.
+- Warm the existing deduplicated public configuration and challenge script in parallel.
+  Creating/validating a challenge and expiring its token still happen normally.
+
+After the integrated release, equivalent reads measured 507 / 476 / 655 ms, with handler
+samples of 98 / 102 / 200 ms. The sample median fell from 5,480 to 507 ms, about 91% less
+wait. These are repeated endpoint/network observations from one machine, not cold-device
+measurements, browser LCP/INP, global percentiles or a guarantee for other projects.
+
+**Placement has a cost.** An explicit compute hint toward the database helped this measured
+path, but warm Worker-served HTML on the distant client route became roughly 200 ms slower.
+Static assets remained edge-served. Verify database location and the actual document/API path;
+do not assume every response becomes faster, enable replicas without reviewing consistency,
+or move a database as an incidental performance fix. Follow the current vendor placement
+contract and use the project's approved deployment path.
+
+**Why it was hard to find.** The document was already fast and the JSON was small. The delay
+was the dependency graph and remote round trips, not the visible loading component.
+
+## Startup optimizations must preserve session and route boundaries
+
+**Symptom.** A console paid for two session lookups, sidebar badges loaded full operational
+lists, and ordinary auth reads initialized unrelated provider/PDF modules.
+
+**Fix verified in the same retrofit:**
+
+- Let entry and shell share the existing authoritative current-user request when it already
+  performs session and access validation. Forward renewal cookies; a protected read must not
+  consume renewal while dropping the cookie. A connection failure offers Retry, not a false
+  sign-out. Revalidate broadcasts rather than trusting another tab as authority.
+- Read only permission-filtered scalar badge counts, with a grouped/indexed query. An
+  unauthorized count is absent, not a fabricated zero. Writes still invalidate badges.
+- Lazily select route groups while keeping global host, CSRF, API-version and error boundaries
+  outside them. Preserve handler/middleware order and construct the full routing inventory
+  for parity checks. Cache route definitions, never requests, sessions or database results.
+- Keep essential interactions eager and optional tabs/dialogs intent- or proximity-loaded.
+  Serialize bounded speculative imports so background warming cannot swamp the critical
+  path. A token-based startup skeleton improves feedback but is not a latency measurement.
+
+**Why it was hard to find.** Every individual read was legitimate. The expensive duplication
+and eager module initialization lived across entry, shell, middleware and route boundaries.
+
+## Several artwork files in one revision must not share one thumbnail key
+
+**Symptom.** Different products displayed the same image even though their approved revision
+contained separate artwork files. A revision-level cache key collapsed distinct images.
+
+**Fix.** Key the private derivative by immutable file identity, source checksum and transform
+version. Key the client in-flight request by authorized checkout scope and immutable file
+identity. Rows using the same file share one transfer; different files in the same revision
+remain separate. If legacy metadata has no file ID, use a conservative line/revision fallback.
+
+Keep thumbnail bounds explicit and reject unsupported, corrupt or oversized sources before
+expensive decoding. A failed derivative must not silently download the original. Derivative
+cache hits do not grant access: resolve current order/grant/approval/assignment authority on
+every request and recheck it before serving bytes. Keep private blobs out of durable client
+storage and revoke object URLs when unused.
+
+This records the shipped thumbnail/identity behavior. It does not claim that fullscreen
+previews were already converted to bounded optimized images; that is a separate delivery.
+
+**Why it was hard to find.** Revision IDs looked stable and deduplicating them looked like a
+performance win. The revision was a container, not the identity of the image bytes.
+
+## A second deployment can silently undo a verified speed fix
+
+**Symptom.** A checkout measured near 0.6 seconds, then returned to about 6.5 seconds after an
+unrelated feature release. The performance commit still existed on main.
+
+**Cause.** Another agent deployed a stale branch's complete runtime tree. A green focused
+feature check did not prove that its tree contained the current production fixes.
+
+**Fix.** Name one release owner, integrate both branches, verify the exact deployed build,
+and require the deployment command to fetch current main and prove it is an ancestor of
+HEAD. Refuse unverifiable/stale bases; test the guard with temporary current, stale and
+integrated repositories. An intentional rollback is a reviewed revert on current main.
+A tooling-only guard change need not cause another runtime deployment.
+
+**Why it was hard to find.** Git history correctly showed both fixes, but the deployed artifact
+was built from only one branch. Preserve the last verified tree, not merely individual commits.
+See [parallel-agent slices](../process/parallel-agent-slices.md).
+
 ## Budgets, measured
 
 - Log **query count and D1 duration per request** in structured logs, and surface them per

@@ -99,7 +99,7 @@ Three notes carry most of the weight:
 | Note | What it covers |
 |---|---|
 | [cloudflare-workers](platform/cloudflare-workers.md) | 22 traps on Workers, D1, R2, Turnstile and Better Auth. Symptom → cause → fix. Most are invisible to `curl` and to unit tests. |
-| [fast-data-hydration](platform/fast-data-hydration.md) | Why screens on Workers + D1 hydrate slowly (calls per screen, queries per number, data on the load path, polling) and the rules, budgets and two tests that keep them instant. Includes the retrofit order for an existing system. |
+| [fast-data-hydration](platform/fast-data-hydration.md) | Slow screen/checkout waterfalls, request-local reuse, session and route boundaries, measured placement tradeoffs, per-file thumbnail identity, and stale deployments undoing speed fixes. Includes budgets, checks and retrofit order. |
 
 ### Design
 
